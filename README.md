@@ -25,7 +25,7 @@ Nesta simulação no Arduino da esquerda, conectado a um botão, quando pression
 
 ## Simulação real
 
-Cada cartão ou tag tem seu código próprio, a partir disso é possível que, quando um escaneado mostra as características de cada carta. 
+Cada cartão ou tag tem seu código próprio, é exibido cada atributo de cada carta ao ser escaneado
 
 
 ## Participantes
