@@ -27,6 +27,71 @@ Nesta simulação no Arduino da esquerda, conectado a um botão, quando pression
 
 Cada cartão ou tag tem seu código próprio, é exibido cada atributo de cada carta ao ser escaneado
 
+### Código-fonte
+```
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Wire.h>
+  
+#define SS_PIN 10 // Pino 10 do Arduino ligado ao Slave Select
+#define RST_PIN 9 // Pino 9 do Arduino ligado ao Reset
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Cria a instancia MFRC522
+  
+char st[20]; // Matriz st com 20 elementos
+  
+void setup() {
+  Serial.begin(9600); // Inicia a serial
+  SPI.begin(); // Inicia a comunicacao SPI  
+     
+  // A biblioteca MFRC522 funciona com SPI
+  mfrc522.PCD_Init(); // Inicia MFRC522
+  Serial.println("Leitor pronto");
+  Serial.println();
+}
+  
+void loop() 
+{
+  // Interroga se existe um novo cartao RFID no leitor
+  if ( ! mfrc522.PICC_IsNewCardPresent()) 
+  {
+    return;
+  }
+  // Le um cartao RFID colocado no leitor
+  if ( ! mfrc522.PICC_ReadCardSerial()) 
+  {
+    return;
+  }
+  //Mostra UID na serial
+  //Serial.print("UID da tag :");
+  String conteudo= ""; // String de nome conteudo
+  byte letra;
+   
+  // mfrc522.uid.size com o tamanho da UID
+  // mfrc522.uid.uidByte[i] com os bytes da UID
+  // A UID do cartao RFID é formada por bytes
+   
+  // Imprime no monitor do PC os bytes da UID 
+  for (byte i = 0; i < mfrc522.uid.size; i++)  
+  {
+     //Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+     //Serial.print(mfrc522.uid.uidByte[i], HEX);
+     conteudo.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+     conteudo.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+   
+ 
+  // Altera o conteudo do string conteudo para letras maiusculas
+  conteudo.toUpperCase();
+
+  if (conteudo.substring(1) == "43 98 90 79")
+  {
+    Serial.println("Carta: Mahindra Racing");
+    Serial.println();
+
+  }
+}
+```
+
 
 ## Participantes
 
